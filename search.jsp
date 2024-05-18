@@ -1,54 +1,73 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
-<%@ page import="java.io.*" %> 
 <html>
-<head>	
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-<body style="background-image: url('https://wallpaperaccess.com/full/5930535.jpg'); background-repeat: no-repeat; background-size: cover;">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Tourism Bookings</title>
 </head>
-<body>
-<h2><span style="color: white;">DOCTER APPOINTMENT DETAILS</span></h2>
+<body style="background-image: url('https://www.twincitysecurityal.com/images/AdobeStock_297026455_1.jpeg'); background-repeat: no-repeat; background-size: cover;">
+<h2 style="color: white;">Search Guards</h2>
 <%
-try {
-Class.forName("com.mysql.jdbc.Driver"); 
-Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/today?characterEncoding=latin1","root","Vidhya@123");
-Statement st = con.createStatement();
-ResultSet rs = st.executeQuery("select * from bankss");
+String booking_no = request.getParameter("booking_no");
+if (booking_no != null && !booking_no.isEmpty()) {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/today?characterEncoding=latin1", "root", "Vidhya@123");
+        PreparedStatement st = con.prepareStatement("SELECT * FROM Tourism WHERE Booking_No = ?");
+        st.setInt(1, Integer.parseInt(booking_no));
+        ResultSet rs = st.executeQuery();
 %>
 <TABLE cellpadding="15" border="1" style="background-color: #ffffcc;">
-<tr><th>Appointment No</th><th>Docter name</th><th>Gender</th><th>Hospital name</th><th>Total bill</th><tr>
+<tr><th>Booking No</th><th>Guard Name</th><th>Gender</th><th>Destination</th><th>Total Cost</th></tr>
 <%
-while (rs.next()) {
+if (rs.next()) {
+    do {
 %>
 <TR>
-<TD><%=rs.getInt(1)%></TD>
-<TD><%=rs.getString(2)%></TD>
-<TD><%=rs.getString(3)%></TD>
-<TD><%=rs.getString(4)%></TD>
-<TD><%=rs.getFloat(5)%></TD>
+<TD><%=rs.getInt("Booking_No")%></TD>
+<TD><%=rs.getString("Customer_Name")%></TD>
+<TD><%=rs.getString("Gender")%></TD>
+<TD><%=rs.getString("Destination")%></TD>
+<TD><%=rs.getFloat("Total_Cost")%></TD>
 </TR>
-<% } %>
 <%
-// close all the connections.
+    } while (rs.next());
+} else {
+%>
+<tr><td colspan="5" style="text-align: center;">Guard not found</td></tr>
+<%
+}
 rs.close();
 st.close();
 con.close();
 } catch (Exception ex) {
+    out.println("<font color='red'>Unable to connect to database.</font>");
+    ex.printStackTrace();
+}
+} else {
 %>
-<font size="+3" color="red"></b>
+<center>
+<form action="search.jsp" method="get">
+    <span style="color: white;">Enter Booking Number:</span> <input type="text" name="booking_no">
+    <input type="submit" value="Search">
+</form>
+</center>
 <%
-out.println("Unable to connect to database.");
 }
 %>
-</TABLE><TABLE>
+<TABLE>
 <TR>
-<TD><FORM ACTION="Disp.jsp" method="get" >
-<button type="submit"><-- back</button></TD>
+<TD>
+<FORM ACTION="bank.html" method="get">
+<button type="submit"><-- Back</button>
+</FORM>
+</TD>
 </TR>
 </TABLE>
-</font>
 </body>
 </html>
+
+
+
+
+
