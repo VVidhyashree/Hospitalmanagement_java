@@ -3,52 +3,52 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Search Tourism Bookings</title>
+    <title>Search appointment Bookings</title>
 </head>
-<body style="background-image: url('https://www.twincitysecurityal.com/images/AdobeStock_297026455_1.jpeg'); background-repeat: no-repeat; background-size: cover;">
-<h2 style="color: white;">Search Guards</h2>
+<body style="background-image: url('https://wallpaperaccess.com/full/5930535.jpg'); background-repeat: no-repeat; background-size: cover;">
+<h2>Search appointment</h2>
 <%
-String booking_no = request.getParameter("booking_no");
-if (booking_no != null && !booking_no.isEmpty()) {
+String transaction_no = request.getParameter("transaction_no");
+if (transaction_no != null && !transaction_no.isEmpty()) {
     try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName("com.mysql.jdbc.Driver");
         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/today?characterEncoding=latin1", "root", "Vidhya@123");
-        PreparedStatement st = con.prepareStatement("SELECT * FROM Tourism WHERE Booking_No = ?");
-        st.setInt(1, Integer.parseInt(booking_no));
+        PreparedStatement st = con.prepareStatement("SELECT * FROM bankss WHERE Transaction_no = ?");
+        st.setInt(1, Integer.parseInt(transaction_no));
         ResultSet rs = st.executeQuery();
 %>
 <TABLE cellpadding="15" border="1" style="background-color: #ffffcc;">
-<tr><th>Booking No</th><th>Guard Name</th><th>Gender</th><th>Destination</th><th>Total Cost</th></tr>
+<tr><th>Appointment No</th><th>Doctor name</th><th>Gender</th><th>Hospital name</th><th>Total bill</th><tr>
 <%
 if (rs.next()) {
     do {
 %>
 <TR>
-<TD><%=rs.getInt("Booking_No")%></TD>
-<TD><%=rs.getString("Customer_Name")%></TD>
-<TD><%=rs.getString("Gender")%></TD>
-<TD><%=rs.getString("Destination")%></TD>
-<TD><%=rs.getFloat("Total_Cost")%></TD>
+<TD><%=rs.getInt(1)%></TD>
+<TD><%=rs.getString(2)%></TD>
+<TD><%=rs.getString(3)%></TD>
+<TD><%=rs.getString(4)%></TD>
+<TD><%=rs.getFloat(5)%></TD>
 </TR>
 <%
     } while (rs.next());
 } else {
 %>
-<tr><td colspan="5" style="text-align: center;">Guard not found</td></tr>
+<tr><td colspan="5">Appointment not found</td></tr>
 <%
 }
 rs.close();
 st.close();
 con.close();
 } catch (Exception ex) {
-    out.println("<font color='red'>Unable to connect to database.</font>");
+    out.println("Unable to connect to database.");
     ex.printStackTrace();
 }
 } else {
 %>
 <center>
 <form action="search.jsp" method="get">
-    <span style="color: white;">Enter Booking Number:</span> <input type="text" name="booking_no">
+    <span style="color: white;">Enter Appointment Number:</span> <input type="text" name="transaction_no">
     <input type="submit" value="Search">
 </form>
 </center>
@@ -58,7 +58,7 @@ con.close();
 <TABLE>
 <TR>
 <TD>
-<FORM ACTION="bank.html" method="get">
+<FORM ACTION="display.jsp" method="get" >
 <button type="submit"><-- Back</button>
 </FORM>
 </TD>
